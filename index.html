@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Цифровая платформа для стройки</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prata&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#1f2937; --bg2:#111827; --panel:rgba(255,255,255,.06); --border:rgba(255,255,255,.1);
+      --text:#f9fafb; --muted:#cbd5e1; --soft:#9ca3af; --accent:#d4c5a9; --accent2:#94a3b8;
+      --r:22px; --shadow:0 18px 50px rgba(0,0,0,.18);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:radial-gradient(circle at 20% 80%, rgba(148,163,184,.08), transparent 20%),radial-gradient(circle at 80% 12%, rgba(212,197,169,.09), transparent 20%),linear-gradient(180deg,var(--bg),var(--bg2));color:var(--text);font-family:'Inter',sans-serif}
+    body{min-height:100vh}
+    .deck{max-width:100%;overflow:hidden}
+    .slide{min-height:100vh;padding:24px 16px 96px;display:none;position:relative}
+    .slide.active{display:block}
+    .wrap{max-width:980px;margin:0 auto}
+    .eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--soft);margin-bottom:12px}
+    h1,h2{font-family:'Prata',serif;line-height:1.08;margin:0 0 16px}
+    h1{font-size:clamp(2.2rem,8vw,4.4rem);text-align:center}
+    h2{font-size:clamp(2rem,6vw,3.4rem)}
+    p{font-size:clamp(1rem,2.5vw,1.15rem);line-height:1.6;color:var(--muted);margin:0}
+    .lead{font-size:clamp(1.05rem,2.7vw,1.2rem);text-align:center;max-width:900px;margin:0 auto;color:#e5e7eb}
+    .sub{font-size:clamp(.82rem,2vw,.95rem);text-transform:uppercase;letter-spacing:.16em;text-align:center;color:var(--soft);margin-top:16px}
+    .hero{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-top:6vh}
+    .hero-icon{font-size:84px;margin-bottom:18px}
+    .grid-2,.grid-3,.grid-4{display:grid;gap:16px}
+    .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+    .card{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);backdrop-filter:blur(10px)}
+    .card h3{margin:0 0 10px;font-size:1.28rem;line-height:1.25}
+    .card p,.card li{font-size:1rem;color:var(--muted);line-height:1.55}
+    .icon{font-size:2rem;margin-bottom:10px}
+    .timeline{display:grid;gap:14px}
+    .step{display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start}
+    .num{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#111827;font-weight:800}
+    .metric{font-size:2.3rem;font-weight:800;color:#fff;margin-bottom:6px}
+    .bar-wrap{display:grid;gap:12px;margin-top:8px}
+    .bar-track{height:16px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
+    .bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:999px}
+    .nav{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);width:min(92vw,760px);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:999px;background:rgba(31,41,55,.88);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(12px);z-index:50}
+    .btn{border:none;background:rgba(255,255,255,.08);color:var(--text);width:44px;height:44px;border-radius:50%;font-size:20px}
+    .dots{display:flex;gap:7px;flex:1;justify-content:center;overflow:auto}
+    .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.18)}
+    .dot.active{background:var(--accent);transform:scale(1.2)}
+    .counter{min-width:56px;text-align:right;color:var(--soft);font-size:.95rem}
+    .cta{display:flex;flex-direction:column;justify-content:center;min-height:100vh;text-align:center}
+    .cta .card{max-width:900px;margin:18px auto 0}
+    @media (max-width: 900px){
+      .grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .grid-3{grid-template-columns:1fr}
+      .grid-2{grid-template-columns:1fr}
+      .slide{padding:20px 14px 104px}
+      .card{padding:18px}
+      h2{font-size:clamp(1.8rem,7vw,2.6rem)}
+    }
+    @media (max-width: 520px){
+      .hero-icon{font-size:64px}
+      h1{font-size:clamp(2rem,10vw,3rem)}
+      h2{font-size:clamp(1.65rem,8.5vw,2.25rem)}
+      .metric{font-size:1.9rem}
+      .grid-4{grid-template-columns:1fr}
+      .nav{padding:10px}
+      .counter{min-width:48px;font-size:.88rem}
+    }
+  </style>
+</head>
+<body>
+  <div class="deck">
+    <section class="slide active">
+      <div class="wrap hero">
+        <div class="hero-icon">🏗️</div>
+        <h1>Цифровая платформа для стройки</h1>
+        <p class="lead">Коммерческое предложение по разработке приложения для управления стройматериалами и процессами</p>
+        <div class="sub">От отгрузки до списания на объекте · доступ всем сотрудникам · AI-автоматизация</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="wrap">
+        <div class="eyebrow">Задача бизнеса</div>
+        <h2>Что требуется заказчику</h2>
+        <div class="grid-2">
+          <article class="card"><div class="icon">📦</div><h3>Единый контур движения ТМЦ</h3><p>Система должна охватывать заявку, резерв, комплектацию, отгрузку, доставку, приемку, выдачу в работу и списание материалов на объекте.</p></article>
+          <article class="card"><div class="icon">👷</div><h3>Общий доступ по ролям</h3><p>В одном цифровом контуре работают склад, снабжение, логистика, прорабы, ПТО, бухгалтерия и руководство.</p></article>
+        </div>
+        <article class="card" style="margin-top:16px"><p>Единая мобильная платформа снимает разрывы между офисом, складом, транспортом и объектом, а руководство получает прозрачную картину по поставкам и остаткам.</p></article>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="wrap">
+        <div class="eyebrow">Контур решения</div>
+        <h2>Архитектура продукта</h2>
+        <div class="grid-3">
+          <article class="card"><div class="icon">🖥️</div><h3>Веб-платформа</h3><p>Кабинеты для руководства, снабжения, аналитики и администрирования.</p></article>
+          <article class="card"><div class="icon">📱</div><h3>Мобильное приложение</h3><p>Приемка, фотофиксация, подтверждение доставки и списание на объекте.</p></article>
+          <article class="card"><div class="icon">🔗</div><h3>Интеграционный слой</h3><p>Связь с 1С, ERP, бухгалтерией, BIM, GPS и корпоративными сервисами.</p></article>
+        </div>
+        <div class="grid-2" style="margin-top:16px">
+          <article class="card"><h3>Центральная база данных</h3><p>Сквозная история движения материалов и всех действий сотрудников.</p></article>
+          <article class="card"><h3>Ролевой доступ</h3><p>Каждый сотрудник видит только нужные операции, документы и отчеты.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="wrap">
+        <div class="eyebrow">Функциональные блоки</div>
+        <h2>Ключевые модули системы</h2>
+        <div class="grid-4">
+          <article class="card"><h3>Заявки</h3><p>Потребность по объектам и согласование.</p></article>
+          <article class="card"><h3>Склад</h3><p>Приемка, резерв, комплектация, отгрузка.</p></article>
+          <article class="card"><h3>Логистика</h3><p>Маршруты, ETA, статусы доставки.</p></article>
+          <article class="card"><h3>Объект</h3><p>Приемка, выдача, возврат, списание.</p></article>
+          <article class="card"><h3>Документы</h3><p>ТТН, УПД, акты, фото и архив.</p></article>
+          <article class="card"><h3>Аналитика</h3><p>Остатки, дефициты, отклонения, KPI.</p></article>
+          <article class="card"><h3>AI-слой</h3><p>OCR, прогноз дефицита, аномалии.</p></article>
+          <article class="card"><h3>Администрирование</h3><p>Роли, справочники, аудит действий.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="wrap">
+        <div class="eyebrow">Сквозной сценарий</div>
+        <h2>От отгрузки до списания</h2>
+        <div class="timeline">
+          <div class="card step"><div class="num">1</div><div><h3>Заявка и резерв</h3><p>ПТО или снабжение формирует потребность, система проверяет остатки и поставки.</p></div></div>
+          <div class="card step"><div class="num">2</div><div><h3>Комплектация и отгрузка</h3><p>Кладовщик собирает заказ, маркирует позиции и фиксирует отпуск со склада.</p></div></div>
+          <div class="card step"><div class="num">3</div><div><h3>Доставка и приемка</h3><p>Прораб подтверждает количество, делает фото и отмечает расхождения.</p></div></div>
+          <div class="card step"><div class="num">4</div><div><h3>Выдача в работу</h3><p>Материал привязывается к зоне, этапу или бригаде.</p></div></div>
+          <div class="card step"><div class="num">5</div><div><h3>Списание</h3><p>Ответственное лицо фиксирует фактическое использование на объекте.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="wrap">
+        <div class="eyebrow">Доступ сотрудникам</div>
+        <h2>Ролевая модель</h2>
+        <div class="grid-2">
+          <article class="card"><h3>Для офиса</h3><p>Снабжение, руководство, бухгалтерия и ПТО получают планирование, согласования, аналитику и документооборот.</p></article>
+          <article class="card"><h3>Для объекта</h3><p>Прораб, мастер, кладовщик и логист работают с поставками и списанием прямо с телефона.</p></article>
+          <article class="card"><h3>Для контроля</h3><p>СБ и аудит видят журнал действий, историю изменений и ответственных по операциям.</p></article>
+          <article class="card"><h3>Для масштаба</h3><p>Система подходит для подключения всех объектов компании без хаоса в доступах.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="wrap">
+        <div class="eyebrow">Искусственный интеллект</div>
+        <h2>Где AI дает реальную пользу</h2>
+        <div class="grid-2">
+          <article class="card"><div class="icon">📄</div><h3>OCR документов</h3><p>Распознавание ТТН, актов, УПД и накладных по фото с автозаполнением карточек поставки.</p></article>
+          <article class="card"><div class="icon">⚠️</div><h3>Поиск расхождений</h3><p>Автосверка заказа, факта поставки, приемки и списания с подсветкой отклонений.</p></article>
+          <article class="card"><div class="icon">📈</div><h3>Прогноз дефицита</h3><p>Оценка риска нехватки материалов по темпам работ, остаткам и графику поставок.</p></article>
+          <article class="card"><div class="icon">🛡️</div><h3>Антифрод и аномалии</h3><p>Выявление повторных списаний, нетипичного перерасхода и подозрительных перемещений.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="wrap">
+        <div class="eyebrow">Эффект для бизнеса</div>
+        <h2>Что улучшает проект</h2>
+        <div class="grid-3">
+          <article class="card"><div class="metric">24/7</div><p>Доступ руководства к актуальным статусам поставок, остатков и отклонений.</p></article>
+          <article class="card"><div class="metric">1</div><p>Единый источник данных по объектам, складам, доставке и списанию.</p></article>
+          <article class="card"><div class="metric">100%</div><p>Прослеживаемость операций и ответственных в цифровом журнале событий.</p></article>
+        </div>
+        <article class="card" style="margin-top:16px">
+          <div class="bar-wrap">
+            <div><p style="margin-bottom:6px">Снижение ручного труда</p><div class="bar-track"><div class="bar-fill" style="width:88%"></div></div></div>
+            <div><p style="margin-bottom:6px">Контроль потерь и расхождений</p><div class="bar-track"><div class="bar-fill" style="width:84%"></div></div></div>
+            <div><p style="margin-bottom:6px">Скорость управленческих решений</p><div class="bar-track"><div class="bar-fill" style="width:92%"></div></div></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="wrap">
+        <div class="eyebrow">План запуска</div>
+        <h2>Этапы реализации</h2>
+        <div class="grid-2">
+          <article class="card"><h3>01. Обследование</h3><p>As-Is, To-Be, процессы, KPI, интеграции, приоритеты MVP.</p></article>
+          <article class="card"><h3>02. MVP</h3><p>Заявки, склад, отгрузка, доставка, приемка и списание на объекте.</p></article>
+          <article class="card"><h3>03. Пилот</h3><p>Запуск на 1–2 объектах, обучение пользователей и корректировка сценариев.</p></article>
+          <article class="card"><h3>04. Масштабирование</h3><p>Подключение всех объектов, полной аналитики, архива и AI-модуля.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="wrap cta">
+        <div class="hero-icon">🤝</div>
+        <h2 style="text-align:center">Готовы перейти к проектированию MVP</h2>
+        <div class="card"><p class="lead">Следующий шаг — стратегическая сессия с руководством, снабжением, складом, ПТО и производством для фиксации состава MVP, интеграций и дорожной карты внедрения.</p></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="nav">
+    <button class="btn" id="prev">‹</button>
+    <div class="dots" id="dots"></div>
+    <button class="btn" id="next">›</button>
+    <div class="counter" id="counter">1 / 10</div>
+  </div>
+
+  <script>
+    const slides=[...document.querySelectorAll('.slide')];
+    const dots=document.getElementById('dots');
+    const counter=document.getElementById('counter');
+    let current=0;
+    slides.forEach((_,i)=>{
+      const d=document.createElement('button');
+      d.className='dot'+(i===0?' active':'');
+      d.setAttribute('aria-label','Слайд '+(i+1));
+      d.onclick=()=>go(i);
+      dots.appendChild(d);
+    });
+    function go(i){
+      slides[current].classList.remove('active');
+      dots.children[current].classList.remove('active');
+      current=(i+slides.length)%slides.length;
+      slides[current].classList.add('active');
+      dots.children[current].classList.add('active');
+      counter.textContent=(current+1)+' / '+slides.length;
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+    document.getElementById('prev').onclick=()=>go(current-1);
+    document.getElementById('next').onclick=()=>go(current+1);
+    document.addEventListener('keydown',e=>{
+      if(e.key==='ArrowRight') go(current+1);
+      if(e.key==='ArrowLeft') go(current-1);
+    });
+    let sx=0;
+    document.addEventListener('touchstart',e=>sx=e.changedTouches[0].clientX,{passive:true});
+    document.addEventListener('touchend',e=>{
+      const dx=e.changedTouches[0].clientX-sx;
+      if(Math.abs(dx)>50) go(dx<0?current+1:current-1);
+    },{passive:true});
+  </script>
+</body>
+</html>
